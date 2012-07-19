@@ -8,25 +8,7 @@ gem 'refinerycms-settings', :git => 'git://github.com/parndt/refinerycms-setting
 group :development, :test do
   gem 'refinerycms-testing', :git => 'git://github.com/resolve/refinerycms.git'
   gem 'guard-rspec', '~> 0.6.0'
-
-  platforms :jruby do
-    gem 'activerecord-jdbcsqlite3-adapter'
-    gem 'activerecord-jdbcmysql-adapter'
-    gem 'activerecord-jdbcpostgresql-adapter'
-    gem 'jruby-openssl'
-  end
-
-  unless defined?(JRUBY_VERSION)
-    gem 'sqlite3'
-    gem 'mysql2'
-    gem 'pg'
-  end
-
-  platforms :mswin, :mingw do
-    gem 'win32console'
-    gem 'rb-fchange', '~> 0.0.5'
-    gem 'rb-notifu', '~> 0.0.4'
-  end
+  gem 'sqlite3'
 
   platforms :ruby do
     gem 'spork', '~> 0.9.0.rc'
@@ -40,26 +22,12 @@ group :development, :test do
       end
       if RbConfig::CONFIG['target_os'] =~ /linux/i
         gem 'rb-inotify', '>= 0.5.1'
-        gem 'libnotify',  '~> 0.1.3'
+        gem 'libnotify'
         gem 'therubyracer', '~> 0.9.9'
       end
     end
   end
-
-  platforms :jruby do
-    unless ENV['TRAVIS']
-      require 'rbconfig'
-      if RbConfig::CONFIG['target_os'] =~ /darwin/i
-        gem 'ruby_gntp'
-      end
-      if RbConfig::CONFIG['target_os'] =~ /linux/i
-        gem 'rb-inotify', '>= 0.5.1'
-        gem 'libnotify',  '~> 0.1.3'
-      end
-    end
-  end
 end
-
 # Refinery/rails should pull in the proper versions of these
 group :assets do
   gem 'sass-rails'
