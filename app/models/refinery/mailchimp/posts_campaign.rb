@@ -8,14 +8,22 @@ module Refinery
 
       attr_accessible :from_name, :from_email, :subject, :body, :mailchimp_list_id, :mailchimp_template_id, :auto_tweet, :posts
 
-      validates_presence_of :subject, :body, :mailchimp_list_id, :from_email, :from_name
+      validates_presence_of :subject, :mailchimp_list_id, :from_email, :from_name
 
       before_save :update_mailchimp_campaign
       before_create :create_mailchimp_campaign
       before_destroy :delete_mailchimp_campaign
 
       before_validation(:on => :create) do
-        self.body = "it is blank" if self.body.empty?
+        if self.posts.any?
+          self.body = ""
+          real_posts = Refinery::Blog::Post.where(:id => self.posts)
+          real_posts.each do |post|
+            self.body += "<h2>#{post.title}</h2>"
+          end
+        else
+          self.body = "there is no any content"
+        end
       end
 
       def sent?

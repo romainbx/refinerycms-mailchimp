@@ -18,13 +18,21 @@ describe "Campaigns" do
   end
 
   it "should have the ability to add new posts campaigns" do
+    create(:blog_post, {
+      :title => "post 1"
+    })
+    create(:blog_post, {
+      :title => "post 2"
+    })
     visit refinery.mailchimp_admin_posts_campaigns_path
     page.should have_selector("a#add_new_posts_campaign")
 
-    click_link("add_new_posts_campaign")
+    find("a#add_new_posts_campaign").click
     current_path.should == refinery.new_mailchimp_admin_posts_campaign_path
     
     within("form.new_posts_campaign") do
+      check "post_1"
+      check "post_2"
       fill_in_posts_campaign_form
     end
 
@@ -35,6 +43,13 @@ describe "Campaigns" do
     page.should have_content("a subject")
 
     current_path.should == refinery.mailchimp_admin_posts_campaigns_path
+
+    find("#records ul li.record:first span.actions a.edit_posts_campaign").click
+    save_and_open_page
+
+    find("input[type=checkbox]#post_1").should be_checked
+    find("input[type=checkbox]#post_2").should be_checked
+    
   end
 
   it "should have a list of posts campaigns" do
@@ -56,5 +71,6 @@ describe "Campaigns" do
 
     current_path.should == refinery.mailchimp_admin_posts_campaigns_path
   end
+
 
 end

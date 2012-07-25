@@ -11,10 +11,16 @@ module Refinery
         before_filter :get_mailchimp_assets, :except => :index
         before_filter :find_posts_campaign, :except => [:index, :new, :create]
         before_filter :fully_qualify_links, :only => [:create, :update]
+        before_filter :find_posts, :only => [:new, :edit]
 
         def new
-          @posts_campaign = ::Refinery::Mailchimp::PostsCampaign.new :from_name => ::Refinery::Setting.get_or_set(Refinery::Mailchimp::API::DefaultFromNameSetting[:name], Refinery::Mailchimp::API::DefaultFromNameSetting[:default]),
-                                                          :from_email => ::Refinery::Setting.get_or_set(Refinery::Mailchimp::API::DefaultFromEmailSetting[:name], Refinery::Mailchimp::API::DefaultFromEmailSetting[:default])
+          name = Refinery::Mailchimp::API::DefaultFromNameSetting[:name]
+          default_name = Refinery::Mailchimp::API::DefaultFromNameSetting[:default]
+          email = Refinery::Mailchimp::API::DefaultFromEmailSetting[:name]
+          default_email = Refinery::Mailchimp::API::DefaultFromEmailSetting[:default]
+          from_name = ::Refinery::Setting.get_or_set(name, default_name)
+          from_email =::Refinery::Setting.get_or_set(email, default_email)
+          @posts_campaign = ::Refinery::Mailchimp::PostsCampaign.new :from_name => from_name, :from_email => from_email
         end
         
         def create
@@ -23,7 +29,6 @@ module Refinery
             flash[:notice] = t('refinery.crudify.created', :what => "'#{@posts_campaign.subject}'")
             respond_with(@posts_campaign, :status => :created, :location => refinery.mailchimp_admin_posts_campaigns_path) 
           else
-            binding.pry
             respond_with(@posts_campaign, :status => :unprocessable_entity) 
           end
         end
@@ -101,7 +106,11 @@ module Refinery
         def client
           @client ||= Refinery::Mailchimp::API.new
         end
+
+        def find_posts
+          @posts = Refinery::Blog::Post.all
+        end
       end
-      end
+    end
   end
 end
