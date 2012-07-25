@@ -13,5 +13,6 @@ Gem::Specification.new do |s|
   s.files             = Dir["{app,config,db,lib}/**/*"] + ["readme.md"]
 
   s.add_dependency  'hominid',              '~> 3.0'
+  s.add_dependency  'gibbon'
 
 end

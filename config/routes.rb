@@ -9,12 +9,14 @@ Refinery::Core::Engine.routes.draw do
           post :send_now
           post :schedule
           post :unschedule
+          post :posts
         end
       end
+      resources :posts_campaigns
+      resources :lists
     end
 
     # Frontend routes
     resource :subscriptions, :only => :create
-
   end
 end

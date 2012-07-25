@@ -4,15 +4,19 @@ gemspec
 
 gem 'refinerycms', :git => 'git://github.com/resolve/refinerycms.git'
 gem 'refinerycms-settings', :git => 'git://github.com/parndt/refinerycms-settings.git'
+gem 'refinerycms-blog', :git => 'git://github.com/resolve/refinerycms-blog.git'
 
 group :development, :test do
   gem 'refinerycms-testing', :git => 'git://github.com/resolve/refinerycms.git'
   gem 'guard-rspec', '~> 0.6.0'
   gem 'sqlite3'
+  gem 'pry-rails'
+  gem 'haml-rails'
 
   platforms :ruby do
     gem 'spork', '~> 0.9.0.rc'
     gem 'guard-spork'
+    gem 'launchy'
 
     unless ENV['TRAVIS']
       require 'rbconfig'

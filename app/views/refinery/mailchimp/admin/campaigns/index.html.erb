@@ -12,6 +12,11 @@
       <%= link_to t('.create_new'), refinery.new_mailchimp_admin_campaign_url,
                    :class => "add_icon" %>
     </li>
+    <li><%= link_to 'add new posts campaign', refinery.new_mailchimp_admin_posts_campaign_path %></li>
+    <li><%= link_to 'new campaign from posts', "#{refinery.new_mailchimp_admin_campaign_url}?from=posts"%></li>
+    <li id="list">
+      <%= link_to 'Members Lists', refinery.mailchimp_admin_lists_path, :class => "folder_icon"%>
+    </li>
   </ul>
 </div>
 <div id='records'>

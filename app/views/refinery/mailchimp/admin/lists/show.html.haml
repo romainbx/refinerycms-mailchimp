@@ -1,0 +1,5 @@
+#records
+  %ul#sortable_list
+    - @members.each do |member|
+      %li.clearfix.record{:class => cycle("on", "on-hover")}
+        = member["email"]

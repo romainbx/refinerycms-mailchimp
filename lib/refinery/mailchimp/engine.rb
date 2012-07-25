@@ -13,7 +13,7 @@ module Refinery
           plugin.name = "refinery-mailchimp"
           plugin.url = proc { Refinery::Core::Engine.routes.url_helpers.mailchimp_admin_campaigns_path }
           plugin.pathname = root
-          plugin.menu_match = %r{refinery/mailchimp/campaigns(/.+?)?$}
+          plugin.menu_match = %r{refinery/mailchimp/(campaigns|lists|posts_campaigns)(/.+?)?$}
           plugin.activity = {
             :class_name => :'refinery/mailchimp/campaign',
             :title => 'subject'
@@ -23,6 +23,8 @@ module Refinery
 
       config.after_initialize do
         Refinery.register_extension(Refinery::Mailchimp)
+        require 'gibbon'
+        Gibbon.api_key = '7e8e612edc7db50483bf107b7aea961b-us5'
       end
 
     end

@@ -14,7 +14,7 @@ class CreateCampaigns < ActiveRecord::Migration
 
   def self.down
     if defined?(::Refinery::UserPlugin)
-      ::Refinery::UserPlugin.destroy_all({:name => "refinerycms-mailchimp"})
+      ::Refinery::UserPlugin.destroy_all({:name => "refinerycms-mailchimp-campaign"})
     end
 
     if defined?(::Refinery::Page)
