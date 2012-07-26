@@ -22,6 +22,17 @@ module Refinery
           from_name = ::Refinery::Setting.get_or_set(name, default_name)
           from_email =::Refinery::Setting.get_or_set(email, default_email)
           @posts_campaign = ::Refinery::Mailchimp::PostsCampaign.new :from_name => from_name, :from_email => from_email
+          respond_to do |format|
+            format.js { render :edit, :layout => false }
+            format.html
+          end
+        end
+
+        def edit
+          respond_to do |format|
+            format.js {render :layout => false}
+            format.html
+          end
         end
         
         def create
@@ -76,8 +87,23 @@ module Refinery
           sending_redirect_to refinery.mailchimp_admin_posts_campaigns_path
         end
 
+        def add_post
+          if @posts_campaign.posts.include? params[:post_id]
+            @posts_campaign.posts.delete params[:post_id]
+          else
+            @posts_campaign.posts << params[:post_id]
+          end
+          @posts_campaign.save
+          render :nothing => true
+        end
+
       protected
         def set_campaign_body
+          if params[:posts_campaign][:posts].size > 0
+            params[:posts_campaign][:posts] = params[:posts_campaign][:posts].split(",") 
+          else
+            params[:posts_campaign][:posts] = []
+          end
           if params[:posts_campaign][:posts].any?
             params[:posts_campaign][:body] = "<ul id='blog_posts'>"
             real_posts = Refinery::Blog::Post.where(:id => params[:posts_campaign][:posts])
@@ -118,7 +144,7 @@ module Refinery
         end
 
         def find_posts
-          @posts = Refinery::Blog::Post.all
+          @posts = Refinery::Blog::Post.paginate(:page => params[:page])
         end
       end
     end

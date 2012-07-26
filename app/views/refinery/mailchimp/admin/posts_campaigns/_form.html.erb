@@ -11,19 +11,8 @@
     </span>
     <%= f.text_field :subject, :class => 'larger widest' -%>
   </div>
-
-  <div class='field'>
-    <%= f.label :body, t('.body') -%>
-    <ul>
-      <% @posts.each do |post| %>
-        <li>
-        <%= check_box_tag "posts_campaign[posts][]", post.id, @posts_campaign.posts.include?(post.id.to_s), :id => "post_#{post.id}" %>
-          <%= post.title %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-
+  <%= f.hidden_field :posts, :value => @posts_campaign.posts.join(",") %>
+  <%= render "posts" %>
   <div class="hemisquare">
     <h2><%= t('.to_and_from') %></h2>
 

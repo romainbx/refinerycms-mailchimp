@@ -20,6 +20,7 @@ Refinery::Core::Engine.routes.draw do
           post :schedule
           post :unschedule
           post :posts
+          get :add_post
         end
       end
       resources :lists
