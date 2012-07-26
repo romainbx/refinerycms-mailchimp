@@ -45,31 +45,45 @@ describe "Campaigns" do
     current_path.should == refinery.mailchimp_admin_posts_campaigns_path
 
     find("#records ul li.record:first span.actions a.edit_posts_campaign").click
-    save_and_open_page
 
     find("input[type=checkbox]#post_1").should be_checked
     find("input[type=checkbox]#post_2").should be_checked
-    
+
   end
 
   it "should have a list of posts campaigns" do
+    post1 = create(:blog_post, {
+      :title => "post 1"
+    })
+    post2 = create(:blog_post, {
+      :title => "post 2"
+    })
     create_list(:posts_campaign, 5)
+    pc = create(:posts_campaign, :subject => "my campaign subject")
     visit refinery.mailchimp_admin_posts_campaigns_path
 
-    page.should have_selector("#records ul li.record", :count => 5)
+    page.should have_selector("#records ul li.record", :count => 6)
 
     find("#records ul li.record:first span.actions a.delete_posts_campaign").click
     current_path.should == refinery.mailchimp_admin_posts_campaigns_path
-    page.should have_selector("#records ul li.record", :count => 4)
+    page.should have_selector("#records ul li.record", :count => 5)
 
-    find("#records ul li.record:first span.actions a.edit_posts_campaign").click
+    find("#records ul li.record:last span.actions a.edit_posts_campaign").click
+    pc.posts.should == []
+    page.should have_css("input[value='my campaign subject']")
     page.should have_selector("form.edit_posts_campaign")
     
     within("form.edit_posts_campaign") do
+      check "post_#{post1.id}"
+      check "post_#{post2.id}"
       fill_in_posts_campaign_form
     end
 
     current_path.should == refinery.mailchimp_admin_posts_campaigns_path
+
+    pc.reload
+    pc.posts.should == ["#{post1.id}", "#{post2.id}"]
+
   end
 
 
