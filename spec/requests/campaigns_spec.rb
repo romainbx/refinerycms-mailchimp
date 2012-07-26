@@ -86,8 +86,7 @@ describe "Campaigns" do
 
     pc.reload
     pc.posts.should == ["#{post1.id}", "#{post2.id}"]
-    pc.body.should include(refinery.blog_post_url(post1), refinery.blog_post_url(post2))
+    pc.body.should include(post1.title, post2.title)
   end
-
 
 end
