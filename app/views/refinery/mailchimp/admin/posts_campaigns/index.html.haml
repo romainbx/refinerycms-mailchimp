@@ -10,3 +10,6 @@
         %span.actions
           = link_to "delete", refinery.mailchimp_admin_posts_campaign_path(posts_campaign), :method => :delete, :class => "delete_posts_campaign"
           = link_to "edit", refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign), :class => "edit_posts_campaign"
+          = link_to refinery_icon_tag("email_go.png"), refinery.send_options_mailchimp_admin_posts_campaign_path(posts_campaign, :dialog => true, :width => 725, :height => 525),
+        :title => t('send_dialog', :scope => 'refinery.mailchimp.admin.campaigns.campaign')
+

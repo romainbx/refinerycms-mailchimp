@@ -12,7 +12,16 @@ Refinery::Core::Engine.routes.draw do
           post :posts
         end
       end
-      resources :posts_campaigns
+      resources :posts_campaigns do
+        member do
+          get :send_options
+          post :send_test
+          post :send_now
+          post :schedule
+          post :unschedule
+          post :posts
+        end
+      end
       resources :lists
     end
 
