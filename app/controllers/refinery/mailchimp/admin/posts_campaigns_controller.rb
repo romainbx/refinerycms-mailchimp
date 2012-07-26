@@ -79,11 +79,12 @@ module Refinery
       protected
         def set_campaign_body
           if params[:posts_campaign][:posts].any?
-            params[:posts_campaign][:body] = ""
+            params[:posts_campaign][:body] = "<ul id='blog_posts'>"
             real_posts = Refinery::Blog::Post.where(:id => params[:posts_campaign][:posts])
             real_posts.each do |post|
-              params[:posts_campaign][:body] += "<h2><a href='#{refinery.blog_post_url(post)}'>#{post.title}</a></h2>"
+              params[:posts_campaign][:body] += "<li><h3><a href='#{refinery.blog_post_url(post)}'>#{post.title}</a></h3></li>"
             end
+            params[:posts_campaign][:body] += "</ul>"
           else
             params[:posts_campaign][:body] = "there is no any content"
           end
