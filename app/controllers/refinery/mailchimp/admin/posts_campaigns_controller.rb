@@ -12,7 +12,7 @@ module Refinery
         before_filter :find_posts_campaign, :except => [:index, :new, :create]
         before_filter :fully_qualify_links, :only => [:create, :update]
         before_filter :set_campaign_body, :only => [:create, :update]
-        before_filter :find_posts, :only => [:new, :edit]
+        before_filter :find_posts, :only => [:new, :edit, :update]
 
         def new
           name = Refinery::Mailchimp::API::DefaultFromNameSetting[:name]
@@ -43,6 +43,11 @@ module Refinery
           else
             respond_with(@posts_campaign, :status => :unprocessable_entity) 
           end
+        end
+
+        def update
+          PostsCampaign.find(params[:id]).update_attributes(params[:posts_campaign])
+          redirect_to refinery.mailchimp_admin_posts_campaigns_path
         end
 
         def send_options
