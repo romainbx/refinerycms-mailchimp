@@ -1,6 +1,7 @@
 module Refinery
   module Mailchimp
     class PostsCampaign < Refinery::Core::BaseModel
+      include Refinery::Core::Engine.routes.url_helpers
 
       self.table_name = 'refinery_mailchimp_posts_campaigns'
 
@@ -13,18 +14,6 @@ module Refinery
       before_save :update_mailchimp_campaign
       before_create :create_mailchimp_campaign
       before_destroy :delete_mailchimp_campaign
-
-      before_validation(:on => :create) do
-        if self.posts.any?
-          self.body = ""
-          real_posts = Refinery::Blog::Post.where(:id => self.posts)
-          real_posts.each do |post|
-            self.body += "<h2>#{post.title}</h2>"
-          end
-        else
-          self.body = "there is no any content"
-        end
-      end
 
       def sent?
         !!sent_at || !!scheduled_at && scheduled_at <= Time.now

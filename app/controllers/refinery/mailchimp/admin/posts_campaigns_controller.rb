@@ -11,6 +11,7 @@ module Refinery
         before_filter :get_mailchimp_assets, :except => :index
         before_filter :find_posts_campaign, :except => [:index, :new, :create]
         before_filter :fully_qualify_links, :only => [:create, :update]
+        before_filter :set_campaign_body, :only => [:create, :update]
         before_filter :find_posts, :only => [:new, :edit]
 
         def new
@@ -75,11 +76,19 @@ module Refinery
           sending_redirect_to refinery.mailchimp_admin_posts_campaigns_path
         end
 
-        def posts
-          render :text => "here is a test"
+      protected
+        def set_campaign_body
+          if params[:posts_campaign][:posts].any?
+            params[:posts_campaign][:body] = ""
+            real_posts = Refinery::Blog::Post.where(:id => params[:posts_campaign][:posts])
+            real_posts.each do |post|
+              params[:posts_campaign][:body] += "<h2><a href='#{refinery.blog_post_url(post)}'>#{post.title}</a></h2>"
+            end
+          else
+            params[:posts_campaign][:body] = "there is no any content"
+          end
         end
 
-      protected
         def sending_redirect_to(path)
           if from_dialog?
             render :text => "<script>parent.window.location = '#{path}';</script>"

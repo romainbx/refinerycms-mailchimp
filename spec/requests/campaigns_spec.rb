@@ -18,10 +18,10 @@ describe "Campaigns" do
   end
 
   it "should have the ability to add new posts campaigns" do
-    create(:blog_post, {
+    post1 = create(:blog_post, {
       :title => "post 1"
     })
-    create(:blog_post, {
+    post2 = create(:blog_post, {
       :title => "post 2"
     })
     visit refinery.mailchimp_admin_posts_campaigns_path
@@ -31,12 +31,15 @@ describe "Campaigns" do
     current_path.should == refinery.new_mailchimp_admin_posts_campaign_path
     
     within("form.new_posts_campaign") do
-      check "post_1"
-      check "post_2"
+      check "post_#{post1.id}"
+      check "post_#{post2.id}"
       fill_in_posts_campaign_form
     end
 
     Refinery::Mailchimp::PostsCampaign.count.should == 1
+    post_campaign = Refinery::Mailchimp::PostsCampaign.first
+    post_campaign.posts.should == ["#{post1.id}", "#{post2.id}"]
+    post_campaign.body.should include(refinery.blog_post_url(post1), refinery.blog_post_url(post2))
 
     page.should have_selector("#records")
     page.should have_selector("#records ul li.record:first span.posts_campaign_title")
@@ -83,7 +86,7 @@ describe "Campaigns" do
 
     pc.reload
     pc.posts.should == ["#{post1.id}", "#{post2.id}"]
-
+    pc.body.should include(refinery.blog_post_url(post1), refinery.blog_post_url(post2))
   end
 
 
