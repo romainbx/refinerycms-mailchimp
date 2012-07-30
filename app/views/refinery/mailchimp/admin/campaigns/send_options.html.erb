@@ -8,7 +8,7 @@
   <p>
     <%= t('.campaign_scheduled_explanation') %> <strong title="<%= @campaign.scheduled_at %>"><%= distance_of_time_in_words_to_now(@campaign.scheduled_at) %></strong>.
   </p>
-  <%= form_tag efinery.unschedule_mailchimp_admin_campaign_path(@campaign) do -%>
+  <%= form_tag refinery.unschedule_mailchimp_admin_campaign_path(@campaign) do -%>
     <%= render :partial => "modal_fields" %>
     <%= submit_tag t('.unschedule_campaign') %>
   <% end %>

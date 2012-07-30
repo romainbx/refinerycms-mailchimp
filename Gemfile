@@ -2,12 +2,12 @@ source 'http://rubygems.org'
 
 gemspec
 
-gem 'refinerycms', :git => 'git://github.com/resolve/refinerycms.git'
-gem 'refinerycms-settings', :git => 'git://github.com/parndt/refinerycms-settings.git'
-gem 'refinerycms-blog', :git => 'git://github.com/resolve/refinerycms-blog.git'
+gem 'refinerycms'
+gem 'refinerycms-settings'
+gem 'refinerycms-blog'
 
 group :development, :test do
-  gem 'refinerycms-testing', :git => 'git://github.com/resolve/refinerycms.git'
+  gem 'refinerycms-testing'
   gem 'guard-rspec', '~> 0.6.0'
   gem 'sqlite3'
   gem 'pry-rails'

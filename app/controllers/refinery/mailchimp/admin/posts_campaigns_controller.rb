@@ -80,7 +80,7 @@ module Refinery
           else
             flash[:alert] = t('refinery.mailchimp.admin.campaigns.campaign.schedule_failure')
           end
-          sending_redirect_to mailchimp_admin_posts_campaigns_path
+          sending_redirect_to refinery.mailchimp_admin_posts_campaigns_path
         end
 
         def unschedule

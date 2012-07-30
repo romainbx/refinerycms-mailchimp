@@ -53,12 +53,13 @@ module Refinery
         end
 
         def schedule
-          if @campaign.schedule_for DateTime.new(*params['date'].values_at('year','month','day','hour','minute').map{|x|x.to_i})
+          schedule_date = DateTime.new(*params['date'].values_at('year','month','day','hour','minute').map{|x|x.to_i})
+          if @campaign.schedule_for schedule_date
             flash[:notice] = t('refinery.mailchimp.admin.campaigns.campaign.schedule_success')
           else
             flash[:alert] = t('refinery.mailchimp.admin.campaigns.campaign.schedule_failure')
           end
-          sending_redirect_to mailchimp_admin_campaigns_path
+          sending_redirect_to refinery.mailchimp_admin_campaigns_path
         end
 
         def unschedule
