@@ -13,7 +13,7 @@ en:
                 mailchimp_default_from_name: "The default From: name for your campaign message (not an email address). This can be changed for each campaign."
                 mailchimp_default_from_email: "The default From: email address for your campaign message. This can be changed for each campaign."
                 mailchimp_admin_base_url: The base URL of your Mailchimp admin area. This is used to generate links to your campaigns for convenience. Only change it if you know what you're doing.
-          campaigns:
+          campaigns: &campaign
             index:
               create_new: Create a new Campaign
               reorder: Reorder Campaigns
@@ -69,6 +69,7 @@ en:
               submit_now: Submit now
               submit_confirm: You're about to email all the subscribers on your list, are you sure?
               unschedule_campaign: Unschedule Campaign
+          posts_campaigns: *campaign
         shared:
           ago: ago
           sent: Sent
