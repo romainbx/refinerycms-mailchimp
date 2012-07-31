@@ -1,7 +1,7 @@
 <% if @campaign.sent? %>
   <h2><%= t('sent', :scope => 'refinery.mailchimp.shared') %></h2>
   <p>
-    <%= t('sent', :scope => 'refinery.mailchimp.shared') %> <strong title="<%= @campaign.sent_at %>"><%= distance_of_time_in_words_to_now(@campaign.sent_at) %> <%= t('ago', :scope => 'refinery.mailchimp.shared') %></strong>.
+    <%= t('sent', :scope => 'refinery.mailchimp.shared') %> 
   </p>
 <% elsif @campaign.scheduled? %>
   <h2><%= t('.campaign_scheduled_title') %></h2>

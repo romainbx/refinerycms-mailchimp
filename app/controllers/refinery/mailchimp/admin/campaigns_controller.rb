@@ -11,6 +11,7 @@ module Refinery
         before_filter :get_mailchimp_assets, :except => :index
         before_filter :find_campaign, :except => [:index, :new, :create]
         before_filter :fully_qualify_links, :only => [:create, :update]
+        skip_before_filter :get_mailchimp_assets, :if => lambda {|c| !!request.xhr? }
 
         def new
           @campaign = ::Refinery::Mailchimp::Campaign.new :from_name => ::Refinery::Setting.get_or_set(Refinery::Mailchimp::API::DefaultFromNameSetting[:name], Refinery::Mailchimp::API::DefaultFromNameSetting[:default]),
