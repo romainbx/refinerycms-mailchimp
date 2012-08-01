@@ -1,15 +1,16 @@
 #actions
   %ul
-    %li= link_to "add new posts campaign", refinery.new_mailchimp_admin_posts_campaign_path, :id => "add_new_posts_campaign"
+    %li= link_to t('.create_new'), refinery.new_mailchimp_admin_posts_campaign_path, :id => "add_new_posts_campaign", :class => "add_icon"
 #records
   %ul#soratble_list
     - @posts_campaigns.each do |posts_campaign|
       %li.clearfix.record{:class => cycle("on", "on-hover")}
         %span.posts_campaign_title
           = link_to "#{posts_campaign.subject}", refinery.mailchimp_admin_posts_campaign_path(posts_campaign)
+        %span{:style => "background:#333; color:#eee; margin-left:20px;"}= t("campaign.has_been_sent") if posts_campaign.sent?
         %span.actions
-          = link_to "delete", refinery.mailchimp_admin_posts_campaign_path(posts_campaign), :method => :delete, :class => "delete_posts_campaign"
-          = link_to "edit", refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign), :class => "edit_posts_campaign"
+          = link_to refinery_icon_tag("delete.png"), refinery.mailchimp_admin_posts_campaign_path(posts_campaign), :method => :delete, :class => "delete_posts_campaign", :'data-confirm' => t('refinery.mailchimp.admin.campaigns.posts_campaign.delete_confirmation', :subject => posts_campaign.subject)
+          = link_to refinery_icon_tag("application_edit.png"), refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign), :class => "edit_posts_campaign"
           = link_to refinery_icon_tag("email_go.png"), refinery.send_options_mailchimp_admin_posts_campaign_path(posts_campaign, :dialog => true, :width => 725, :height => 525),
         :title => t('send_dialog', :scope => 'refinery.mailchimp.admin.campaigns.campaign')
 

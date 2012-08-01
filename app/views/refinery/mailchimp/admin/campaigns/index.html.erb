@@ -13,9 +13,7 @@
                    :class => "add_icon" %>
     </li>
     <li>
-    <%= link_to "Posts Campaigns", refinery.mailchimp_admin_posts_campaigns_path, :id => :posts_campaigns %> 
-    <li id="list">
-      <%= link_to 'Members Lists', refinery.mailchimp_admin_lists_path, :class => "folder_icon"%>
+    <%= link_to t('posts_campaign_list'), refinery.mailchimp_admin_posts_campaigns_path, :id => :posts_campaigns, :class => "add_icon" %> 
     </li>
   </ul>
 </div>

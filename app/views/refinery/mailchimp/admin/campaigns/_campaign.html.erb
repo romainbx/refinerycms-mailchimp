@@ -8,6 +8,11 @@
       <span class="preview" title="<%= campaign.scheduled_at %>">sending in <%= distance_of_time_in_words_to_now(campaign.scheduled_at) %></span>
     <% end %>
   </span>
+  <% if campaign.sent? %>
+    <span style="background:#333; color:#eee; margin-left:20px;">
+      <%= t("campaign.has_been_sent") %>
+    </span> 
+  <% end %>
   <span class='actions'>
     <%= link_to refinery_icon_tag("application_edit.png"), refinery.edit_mailchimp_admin_campaign_path(campaign),
          :subject => t('.edit') %>
