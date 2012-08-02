@@ -21,12 +21,6 @@ module Refinery
         end
       end
 
-      config.after_initialize do
-        Refinery.register_extension(Refinery::Mailchimp)
-        require 'gibbon'
-        Gibbon.api_key = '7e8e612edc7db50483bf107b7aea961b-us5'
-      end
-
     end
 
     class API < Hominid::API
