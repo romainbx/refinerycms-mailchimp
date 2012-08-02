@@ -2,6 +2,7 @@ module Refinery
   module Mailchimp
     module Admin
       class PostsCampaignsController < ::Refinery::AdminController
+        include ActionView::Helpers::TextHelper
         respond_to :html
         crudify :'refinery/mailchimp/posts_campaign', :title_attribute => 'subject', :xhr_paging => true, :sortable => false
 
@@ -34,14 +35,14 @@ module Refinery
             format.html
           end
         end
-        
+
         def create
           @posts_campaign = PostsCampaign.create(params[:posts_campaign])
           if @posts_campaign.save
             flash[:notice] = t('refinery.crudify.created', :what => "'#{@posts_campaign.subject}'")
-            respond_with(@posts_campaign, :status => :created, :location => refinery.mailchimp_admin_posts_campaigns_path) 
+            respond_with(@posts_campaign, :status => :created, :location => refinery.mailchimp_admin_posts_campaigns_path)
           else
-            respond_with(@posts_campaign, :status => :unprocessable_entity) 
+            respond_with(@posts_campaign, :status => :unprocessable_entity)
           end
         end
 
@@ -105,17 +106,23 @@ module Refinery
       protected
         def set_campaign_body
           if params[:posts_campaign][:posts].size > 0
-            params[:posts_campaign][:posts] = params[:posts_campaign][:posts].split(",") 
+            params[:posts_campaign][:posts] = params[:posts_campaign][:posts].split(",")
           else
             params[:posts_campaign][:posts] = []
           end
           if params[:posts_campaign][:posts].any?
-            params[:posts_campaign][:body] = "<ul id='blog_posts'>"
+            params[:posts_campaign][:body] = ""#"<ul id='blog_posts'>"
             real_posts = Refinery::Blog::Post.where(:id => params[:posts_campaign][:posts])
             real_posts.each do |post|
-              params[:posts_campaign][:body] += "<li><h3><a href='#{refinery.blog_post_url(post)}'>#{post.title}</a></h3></li>"
+              content = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe
+              content = content.chomp
+              params[:posts_campaign][:body] += "<div style='margin-top:10px;margin-bottom:10px;'>"
+              params[:posts_campaign][:body] += "<div style='font-size:16px;font-weight:bold;'><a href='#{refinery.blog_post_url(post)}'>#{post.title}</a></div>"
+              params[:posts_campaign][:body] += "<div style='font-size:11px;color:#888'>#{post.published_at.try(:strftime, '%d-%b-%Y')}</div>"
+              params[:posts_campaign][:body] += "#{content}"
+              params[:posts_campaign][:body] += "</div>"
             end
-            params[:posts_campaign][:body] += "</ul>"
+            #params[:posts_campaign][:body] += "</ul>"
           else
             params[:posts_campaign][:body] = "there is no any content"
           end

@@ -5,7 +5,21 @@
     <% @posts.each do |post| %>
       <li>
       <%= check_box_tag "posts_campaign_post_item", post.id, @posts_campaign.posts.include?(post.id.to_s), :id => "post_#{post.id}" %>
+        <% if post.edition.present? %>
+          <span class="label notice" style="background:#7D041A; color:#fff; margin-right:5px; padding:0 0 0 4px;">
+            <%= post.edition.number %>
+          </span>
+        <% end %>
+        <% if post.only_for_member? %>
+          <span class="label notice" style="background:#333; color:#fff; margin-right:5px; padding:0 0 0 3px;">
+            M
+          </span>
+        <% end %>
         <%= post.title %>
+        <span class="preview">
+          <%= post.published_at.try(:strftime, '%b %d, %Y') || 'draft' %>
+          <%= " by #{post.author.username}" if post.author.present? %>
+        </span>
       </li>
     <% end %>
   </ul>
