@@ -1,9 +1,10 @@
 -# Attention! here you can only use inline css style, css class ,id is not useful, either javascript
-%ul
-  - @posts.each do |post|
-    %li= link_to post.title, refinery.blog_post_url(post)
+- @posts.each do |post|
+  %div{:style = "margin-top:10px;margin-bottom:10px;"}
+    %div{:style => "font-size:16px;font-weight:bold;"}= link_to post.title, refinery.blog_post_url(post)
+    %div{:style => "font-size:11px; color:#888"}= post.published_at.try(:strftime, '%d-%b-%Y')
+    = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe.chomp
 
--# params[:posts_campaign][:body] = ""#"<ul id='blog_posts'>"
 -# real_posts = Refinery::Blog::Post.where(:id => params[:posts_campaign][:posts])
 -# real_posts.each do |post|
 -#   content = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe
@@ -14,5 +15,4 @@
 -#   params[:posts_campaign][:body] += "#{content}"
 -#   params[:posts_campaign][:body] += "</div>"
 -# end
--# #params[:posts_campaign][:body] += "</ul>"
 
