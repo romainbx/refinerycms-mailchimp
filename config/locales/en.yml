@@ -22,6 +22,7 @@ en:
               no_items_yet: There are no Campaigns yet. Click "Create a new Campaign" to add your first campaign.
               set_api_key: You must set a valid Mailchimp API key.
               set_api_link: Click here to update your key.
+              posts_campaign_list: Post Campaign List
             campaign:
               view_live: View this campaign live <br/><em>(opens in a new window)</em>
               edit: Edit this campaign
@@ -69,7 +70,12 @@ en:
               submit_now: Submit now
               submit_confirm: You're about to email all the subscribers on your list, are you sure?
               unschedule_campaign: Unschedule Campaign
-          posts_campaigns: *campaign
+          posts_campaigns:
+            << : *campaign
+            index:
+              create_new: Create a new Post Campaign
+            posts:
+              posts: Choose posts
         shared:
           ago: ago
           sent: Sent
