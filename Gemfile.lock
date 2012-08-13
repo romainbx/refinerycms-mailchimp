@@ -146,6 +146,8 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.7.1)
       slop (>= 2.4.4, < 3)
+    pry-nav (0.2.1)
+      pry (~> 0.9.9)
     pry-rails (0.1.6)
       pry
     rack (1.4.1)
@@ -297,6 +299,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   libnotify
+  pry-nav
   pry-rails
   rb-inotify (>= 0.5.1)
   refinerycms

@@ -1,18 +1,8 @@
 <li class='clearfix record <%= cycle("on", "on-hover") %>' id="<%= dom_id(campaign) -%>">
   <span class='subject'>
     <%= campaign.subject %>
-
-    <% if campaign.sent? %>
-      <span class="preview" title="<%= campaign.sent %>"><%= "#{t('sent', :scope => 'refinery.mailchimp.shared').downcase} #{distance_of_time_in_words_to_now(campaign.sent)} #{t('ago', :scope => 'refinery.mailchimp.shared')}." %></span>
-    <% elsif campaign.scheduled? %>
-      <span class="preview" title="<%= campaign.scheduled_at %>">sending in <%= distance_of_time_in_words_to_now(campaign.scheduled_at) %></span>
-    <% end %>
   </span>
-  <% if campaign.sent? %>
-    <span style="background:#333; color:#eee; margin-left:20px;">
-      <%= t("campaign.has_been_sent") %>
-    </span> 
-  <% end %>
+  <%= preview campaign %>
   <span class='actions'>
     <%= link_to refinery_icon_tag("application_edit.png"), refinery.edit_mailchimp_admin_campaign_path(campaign),
          :subject => t('.edit') %>

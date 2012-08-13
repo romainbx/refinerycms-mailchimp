@@ -78,7 +78,8 @@ en:
               posts: Choose posts
         shared:
           ago: ago
-          sent: Sent
+          sent: sent 
+          sending_in: sending in 
         subscriptions:
           success: Subscription was succesful.
           invalid_email: Email address is invalid.

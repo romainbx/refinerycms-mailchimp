@@ -11,6 +11,7 @@ group :development, :test do
   gem 'guard-rspec', '~> 0.6.0'
   gem 'sqlite3'
   gem 'pry-rails'
+  gem 'pry-nav'
   gem 'haml-rails'
 
   platforms :ruby do

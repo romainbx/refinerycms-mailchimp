@@ -3,6 +3,7 @@ module Refinery
     module Admin
       class CampaignsController < ::Refinery::AdminController
         respond_to :html
+        helper Refinery::Mailchimp::CampaignHelper
         crudify :'refinery/mailchimp/campaign', :title_attribute => 'subject', :xhr_paging => true, :sortable => false
 
         rescue_from Refinery::Mailchimp::API::BadAPIKeyError, :with => :need_api_key
