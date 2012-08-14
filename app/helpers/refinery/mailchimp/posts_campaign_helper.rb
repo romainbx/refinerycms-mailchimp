@@ -21,6 +21,10 @@ module Refinery
         end
       end
 
+      def action_link_new
+        link_to t('.create_new'), refinery.new_mailchimp_admin_posts_campaign_path, :id => "add_new_posts_campaign", :class => "add_icon"
+      end
+
       def action_link_edit posts_campaign
         link_to refinery_icon_tag("application_edit.png"),
           refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign),
@@ -39,6 +43,10 @@ module Refinery
           :method => :delete,
           :class => "delete_posts_campaign",
           :'data-confirm' => t('refinery.mailchimp.admin.campaigns.posts_campaign.delete_confirmation', :subject => posts_campaign.subject)
+      end
+
+      def render_posts_campaign_list posts_campaigns
+        render :partial => 'posts_campaign', :collection => posts_campaigns
       end
 
       def searchable?

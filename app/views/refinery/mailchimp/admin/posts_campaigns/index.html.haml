@@ -1,5 +1,5 @@
 #actions
   %ul
-    %li= link_to t('.create_new'), refinery.new_mailchimp_admin_posts_campaign_path, :id => "add_new_posts_campaign", :class => "add_icon"
+    %li= action_link_new
 #records
-  %ul#soratble_list= render :partial => 'posts_campaign', :collection => @posts_campaigns
+  %ul#soratble_list= render_posts_campaign_list @posts_campaigns
