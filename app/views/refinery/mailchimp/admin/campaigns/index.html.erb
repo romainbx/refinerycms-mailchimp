@@ -1,13 +1,6 @@
 <div id='actions'>
   <ul>
-    <% if ::Refinery::Mailchimp::Admin::CampaignsController.searchable? %>
-      <li>
-        <%= render :partial => "/refinery/admin/search",
-                    :locals => {
-                      :url => refinery.mailchimp_admin_campaigns_url
-                    } %>
-      </li>
-    <% end %>
+    <%= render_search_form if searchable? %>
     <li>
       <%= link_to t('.create_new'), refinery.new_mailchimp_admin_campaign_url,
                    :class => "add_icon" %>

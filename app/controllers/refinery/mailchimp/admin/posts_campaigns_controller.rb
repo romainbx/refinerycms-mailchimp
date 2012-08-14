@@ -3,6 +3,7 @@ module Refinery
     module Admin
       class PostsCampaignsController < ::Refinery::AdminController
         include ActionView::Helpers::TextHelper
+        helper Refinery::Mailchimp::PostsCampaignHelper
         respond_to :html
         crudify :'refinery/mailchimp/posts_campaign', :title_attribute => 'subject', :xhr_paging => true, :sortable => false
 

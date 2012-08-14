@@ -1,6 +1,6 @@
 module Refinery
   module Mailchimp
-    module CampaignHelper
+    module PostsCampaignHelper
 
       def preview campaign
         if campaign.sent?
@@ -18,30 +18,27 @@ module Refinery
               #{distance_of_time_in_words_to_now(campaign.scheduled_at)}
             PREVIEW
           end
-        else
-          content_tag(:span, 'no content')
         end
       end
 
-      def action_link_edit campaign
+      def action_link_edit posts_campaign
         link_to refinery_icon_tag("application_edit.png"),
-          refinery.edit_mailchimp_admin_campaign_path(campaign),
-          :subject => t('.edit')
+          refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign),
+          :class => "edit_posts_campaign"
       end
 
-      def action_link_send_email campaign
+      def action_link_send_email posts_campaign
         link_to refinery_icon_tag("email_go.png"),
-          refinery.send_options_mailchimp_admin_campaign_path(campaign, :dialog => true, :width => 725, :height => 525),
+          refinery.send_options_mailchimp_admin_posts_campaign_path(posts_campaign, :dialog => true, :width => 725, :height => 525),
           :title => t('send_dialog', :scope => 'refinery.mailchimp.admin.campaigns.campaign')
       end
 
-      def action_link_delete campaign
+      def action_link_delete posts_campaign
         link_to refinery_icon_tag("delete.png"),
-          refinery.mailchimp_admin_campaign_path(campaign),
-          :class => "cancel confirm-delete",
-          :subject => t('.delete'),
-          :'data-confirm' => t('refinery.mailchimp.admin.campaigns.campaign.delete_confirmation', :subject => campaign.subject),
-          :'data-method' => :delete
+          refinery.mailchimp_admin_posts_campaign_path(posts_campaign),
+          :method => :delete,
+          :class => "delete_posts_campaign",
+          :'data-confirm' => t('refinery.mailchimp.admin.campaigns.posts_campaign.delete_confirmation', :subject => posts_campaign.subject)
       end
 
       def searchable?
@@ -50,7 +47,7 @@ module Refinery
 
       def render_search_form
         content_tag(:li) do
-          render :partial => "/refinery/admin/search", :locals => {:url => refinery.mailchimp_admin_campaigns_url}
+          render :partial => "/refinery/admin/search", :locals => {:url => refinery.mailchimp_admin_posts_campaigns_url}
         end
       end
 
