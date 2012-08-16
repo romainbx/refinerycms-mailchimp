@@ -4,15 +4,3 @@
     %div{:style => "font-size:16px;font-weight:bold;"}= link_to post.title, refinery.blog_post_url(post)
     %div{:style => "font-size:11px; color:#888"}= post.published_at.try(:strftime, '%d-%b-%Y')
     = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe.chomp
-
--# real_posts = Refinery::Blog::Post.where(:id => params[:posts_campaign][:posts])
--# real_posts.each do |post|
--#   content = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe
--#   content = content.chomp
--#   params[:posts_campaign][:body] += "<div style='margin-top:10px;margin-bottom:10px;'>"
--#   params[:posts_campaign][:body] += "<div style='font-size:16px;font-weight:bold;'><a href='#{refinery.blog_post_url(post)}'>#{post.title}</a></div>"
--#   params[:posts_campaign][:body] += "<div style='font-size:11px;color:#888'>#{post.published_at.try(:strftime, '%d-%b-%Y')}</div>"
--#   params[:posts_campaign][:body] += "#{content}"
--#   params[:posts_campaign][:body] += "</div>"
--# end
-

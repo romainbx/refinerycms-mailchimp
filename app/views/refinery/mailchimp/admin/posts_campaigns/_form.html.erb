@@ -11,8 +11,15 @@
     </span>
     <%= f.text_field :subject, :class => 'larger widest' -%>
   </div>
-  <%= f.hidden_field :posts, :value => @posts_campaign.posts.join(",") %>
-  <%= render "posts" %>
+  <div class='field'>
+    <% if params[:latest] %>
+      <%= f.label :latest, t('.latest') %>
+      <%= f.select(:latest, {"Latest 10" => 1, "Latest 20" => 2}) %>
+    <% else %>
+      <%= f.hidden_field :posts, :value => @posts_campaign.posts.join(",") %>
+      <%= render "posts" %>
+    <% end %>
+  </div>
   <div class="hemisquare">
     <h2><%= t('.to_and_from') %></h2>
 

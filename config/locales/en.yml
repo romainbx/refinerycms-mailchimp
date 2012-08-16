@@ -74,6 +74,7 @@ en:
             << : *campaign
             index:
               create_new: Create a new Post Campaign
+              create_new_latest: Create a new latest Post Campaign
             posts:
               posts: Choose posts
         shared:

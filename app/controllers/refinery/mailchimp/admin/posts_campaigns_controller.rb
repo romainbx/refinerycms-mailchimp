@@ -5,7 +5,8 @@ module Refinery
         include ActionView::Helpers::TextHelper
         helper Refinery::Mailchimp::PostsCampaignHelper
         respond_to :html
-        crudify :'refinery/mailchimp/posts_campaign', :title_attribute => 'subject', :xhr_paging => true, :sortable => false
+        crudify :'refinery/mailchimp/posts_campaign', :title_attribute => 'subject',
+          :xhr_paging => true, :sortable => false
 
         rescue_from Refinery::Mailchimp::API::BadAPIKeyError, :with => :need_api_key
         rescue_from Hominid::APIError, :with => :need_api_key
@@ -42,7 +43,9 @@ module Refinery
           @posts_campaign = PostsCampaign.create(params[:posts_campaign])
           if @posts_campaign.save
             flash[:notice] = t('refinery.crudify.created', :what => "'#{@posts_campaign.subject}'")
-            respond_with(@posts_campaign, :status => :created, :location => refinery.mailchimp_admin_posts_campaigns_path)
+            respond_with(@posts_campaign, 
+                         :status => :created,
+                         :location => refinery.mailchimp_admin_posts_campaigns_path)
           else
             respond_with(@posts_campaign, :status => :unprocessable_entity)
           end
@@ -59,11 +62,8 @@ module Refinery
         def send_test
           if @posts_campaign.send_test_to params[:email]
             flash[:notice] = t('refinery.mailchimp.admin.campaigns.campaign.send_test_success', :email => params[:email])
-            logger.info "Great Successs !! \n \n \n \n"
           else
             flash[:alert] = t('refinery.mailchimp.admin.campaigns.campaign.send_test_failure', :email => params[:email])
-            logger.info "Great Failure !! \n \n \n \n"
-
           end
           sending_redirect_to refinery.mailchimp_admin_posts_campaigns_path
         end
@@ -78,7 +78,8 @@ module Refinery
         end
 
         def schedule
-          if @posts_campaign.schedule_for DateTime.new(*params['date'].values_at('year','month','day','hour','minute').map{|x|x.to_i})
+          schedule_date = DateTime.new(*params['date'].values_at('year','month','day','hour','minute').map{|x|x.to_i})
+          if @posts_campaign.schedule_for schedule_date
             flash[:notice] = t('refinery.mailchimp.admin.campaigns.campaign.schedule_success')
           else
             flash[:alert] = t('refinery.mailchimp.admin.campaigns.campaign.schedule_failure')

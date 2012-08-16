@@ -7,7 +7,7 @@ module Refinery
 
       serialize :posts, Array
 
-      attr_accessible :from_name, :from_email, :subject, :body, :mailchimp_list_id, :mailchimp_template_id, :auto_tweet, :posts
+      attr_accessible :from_name, :from_email, :subject, :body, :mailchimp_list_id, :mailchimp_template_id, :auto_tweet, :posts, :latest
 
       validates_presence_of :subject, :mailchimp_list_id, :from_email, :from_name
 
