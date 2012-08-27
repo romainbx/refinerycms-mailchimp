@@ -11,6 +11,9 @@ Refinery::Core::Engine.routes.draw do
           post :unschedule
           post :posts
         end
+        collection do
+          get :update_positions
+        end
       end
       resources :posts_campaigns do
         member do
@@ -23,7 +26,6 @@ Refinery::Core::Engine.routes.draw do
           get :add_post
         end
       end
-      resources :lists
     end
 
     # Frontend routes
