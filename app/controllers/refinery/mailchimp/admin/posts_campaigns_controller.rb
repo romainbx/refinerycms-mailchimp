@@ -135,15 +135,18 @@ module Refinery
       protected
 
         def set_campaign_body
-          if params[:posts_campaign][:posts].size > 0
+          if params[:posts_campaign][:edito_id]
+            edition = Refinery::Blog::Post.find params[:posts_campaign][:edito_id]
+            @posts = edition.content_posts
+            @edito = edition.edito
+          elsif params[:posts_campaign][:posts].size > 0
             posts_ids = params[:posts_campaign][:posts].split(",")
-            @edito = Refinery::Blog::Post.find(params[:posts_campaign][:edito_id]) if params[:posts_campaign][:edito_id]
             @posts = Refinery::Blog::Post.where(:id => posts_ids)
-            @categories_posts = @posts.to_a.group_by{|post| post.categories.first.title }
-            body_html = render_to_string(:partial => "campaign_body")
-            params[:posts_campaign][:body] = body_html
             params[:posts_campaign][:posts] = posts_ids
           end
+          @categories_posts = @posts.to_a.group_by{|post| post.categories.first.title }
+          body_html = render_to_string(:partial => "campaign_body")
+          params[:posts_campaign][:body] = body_html
         end
 
         def sending_redirect_to(path)
