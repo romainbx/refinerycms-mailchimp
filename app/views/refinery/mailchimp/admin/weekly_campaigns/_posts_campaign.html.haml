@@ -1,0 +1,7 @@
+%li.clearfix.record{:class => cycle("on", "on-hover")}
+  %span.subject= posts_campaign.subject
+  = preview posts_campaign
+  %span.actions
+    = action_link_delete posts_campaign
+    = action_link_edit posts_campaign
+    = action_link_send_email posts_campaign

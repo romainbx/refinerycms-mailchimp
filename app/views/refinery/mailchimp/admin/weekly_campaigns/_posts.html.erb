@@ -1,0 +1,56 @@
+<div class='field post_campaign_body'>
+  <%= label_tag :posts, t('.posts') -%>
+  <%= will_paginate @posts, :previous_label => '&laquo;', :next_label => '&raquo;' %>
+  <ul>
+    <% @posts.each do |post| %>
+      <li>
+      <%= check_box_tag "posts_campaign_post_item", post.id, @posts_campaign.posts.include?(post.id.to_s), :id => "post_#{post.id}" %>
+        <% if post.edition.present? %>
+          <span class="label notice" style="background:#7D041A; color:#fff; margin-right:5px; padding:0 0 0 4px;">
+            <%= post.edition.number %>
+          </span>
+        <% end %>
+        <% if post.only_for_member? %>
+          <span class="label notice" style="background:#333; color:#fff; margin-right:5px; padding:0 0 0 3px;">
+            M
+          </span>
+        <% end %>
+        <%= post.title %>
+        <span class="preview">
+          <%= post.published_at.try(:strftime, '%b %d, %Y') || 'draft' %>
+          <%= " by #{post.author.username}" if post.author.present? %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+  <script>
+    vals = $("input#posts_campaign_posts").attr("value");
+    if(vals.length > 0){
+      vals_arr = vals.split(",");
+      $("input[name='posts_campaign_post_item']").each(function(){
+        if(vals_arr.indexOf($(this).attr("value")) != -1){
+          $(this).attr("checked", "checked");
+        }
+      });
+    }
+    function addOrRemovePost(id, addOrRemove){
+      val = $("input#posts_campaign_posts").attr("value");
+      val_arr = []
+      if(val.length > 0){
+        val_arr = val.split(",");
+      }
+      if(addOrRemove){
+        val_arr.push(id);
+      }else{
+        val_arr.splice(val_arr.indexOf(id), 1)
+      }
+      $("input#posts_campaign_posts").attr("value", val_arr.join());
+      console.log($("input#posts_campaign_posts"))
+    }
+
+    $('.pagination a').attr('data-remote', 'true');
+    $("input[name='posts_campaign_post_item']").click(function(){
+      addOrRemovePost($(this).attr("value"), $(this).is(':checked'))
+    });
+  </script>
+</div>
