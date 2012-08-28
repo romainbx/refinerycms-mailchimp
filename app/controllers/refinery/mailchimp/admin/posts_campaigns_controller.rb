@@ -12,11 +12,19 @@ module Refinery
         rescue_from Hominid::APIError, :with => :need_api_key
 
         before_filter :get_mailchimp_assets, :except => :index
-        before_filter :find_posts_campaign, :except => [:index, :new, :create]
+        before_filter :find_posts_campaign, :except => [:index, :new, :create, :pause, :resume]
         before_filter :fully_qualify_links, :only => [:create, :update]
         before_filter :set_campaign_body, :only => [:create, :update]
         before_filter :find_posts, :only => [:new, :edit]
         skip_before_filter :get_mailchimp_assets, :if => lambda {|c| !!request.xhr? }
+
+        def index
+          if params[:with_edito]
+            @posts_campaigns = Refinery::Mailchimp::PostsCampaign.weekly.paginate(:page => params[:page])
+          else
+            @posts_campaigns = Refinery::Mailchimp::PostsCampaign.selected.paginate(:page => params[:page])
+          end
+        end
 
         def new
           name = Refinery::Mailchimp::API::DefaultFromNameSetting[:name]
@@ -43,9 +51,11 @@ module Refinery
           @posts_campaign = PostsCampaign.create(params[:posts_campaign])
           if @posts_campaign.save
             flash[:notice] = t('refinery.crudify.created', :what => "'#{@posts_campaign.subject}'")
+            location = refinery.mailchimp_admin_posts_campaigns_path
+            location = refinery.mailchimp_admin_posts_campaigns_path(:with_edito => true) if @posts_campaign.edito_id
             respond_with(@posts_campaign, 
                          :status => :created,
-                         :location => refinery.mailchimp_admin_posts_campaigns_path)
+                         :location => location)
           else
             respond_with(@posts_campaign, :status => :unprocessable_entity)
           end
@@ -53,7 +63,23 @@ module Refinery
 
         def update
           PostsCampaign.find(params[:id]).update_attributes(params[:posts_campaign])
-          redirect_to refinery.mailchimp_admin_posts_campaigns_path
+          if(params[:with_edito])
+            redirect_to refinery.mailchimp_admin_posts_campaigns_path(:with_edito => true)
+          else
+            redirect_to refinery.mailchimp_admin_posts_campaigns_path
+          end
+        end
+
+        def pause
+          Gibbon.campaign_pause(:cid => Refinery::Mailchimp.weekly_campaign_id)
+          flash[:notice] = t('refinery.mailchimp.admin.campaigns.shared.paused')
+          redirect_to :back
+        end
+
+        def resume
+          Gibbon.campaign_resume(:cid => Refinery::Mailchimp.weekly_campaign_id)
+          flash[:notice] = t('refinery.mailchimp.admin.campaignss.shared.resumed')
+          redirect_to :back
         end
 
         def send_options
@@ -107,18 +133,16 @@ module Refinery
         end
 
       protected
+
         def set_campaign_body
           if params[:posts_campaign][:posts].size > 0
-            params[:posts_campaign][:posts] = params[:posts_campaign][:posts].split(",")
-          else
-            params[:posts_campaign][:posts] = []
-          end
-          if params[:posts_campaign][:posts].any?
-            @posts = Refinery::Blog::Post.where(:id => params[:posts_campaign][:posts])
+            posts_ids = params[:posts_campaign][:posts].split(",")
+            @edito = Refinery::Blog::Post.find(params[:posts_campaign][:edito_id]) if params[:posts_campaign][:edito_id]
+            @posts = Refinery::Blog::Post.where(:id => posts_ids)
+            @categories_posts = @posts.to_a.group_by{|post| post.categories.first.title }
             body_html = render_to_string(:partial => "campaign_body")
             params[:posts_campaign][:body] = body_html
-          else
-            params[:posts_campaign][:body] = "there is no any content"
+            params[:posts_campaign][:posts] = posts_ids
           end
         end
 
@@ -152,6 +176,7 @@ module Refinery
         def find_posts
           @posts = Refinery::Blog::Post.paginate(:page => params[:page])
         end
+
       end
     end
   end

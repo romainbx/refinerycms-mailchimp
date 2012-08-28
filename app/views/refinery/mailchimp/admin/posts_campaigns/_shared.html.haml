@@ -1,0 +1,18 @@
+#actions
+  %ul.collapsible_menu
+    %li.not_a_link= link_to t(".newsletter"), "#", :class => "folder_icon"
+    %li= link_to t(".manage"), refinery.mailchimp_admin_campaigns_path, :class => "folder_edit_icon"
+    %li= link_to t(".create_new"), refinery.new_mailchimp_admin_campaign_path, :class => "page_add_icon"
+  %ul.collapsible_menu
+    %li.not_a_link= link_to t(".selected_posts_newsletter"), "#", :class => "folder_icon"
+    %li= link_to t(".manage"), refinery.mailchimp_admin_posts_campaigns_path, :class => "folder_edit_icon"
+    %li= link_to t(".create_new"), refinery.new_mailchimp_admin_posts_campaign_path, :class => "page_add_icon"
+  %ul.collapsible_menu
+    %li.not_a_link= link_to t(".weekly_newsletter"), "#", :class => "folder_icon"
+    %li= link_to t(".manage"), refinery.mailchimp_admin_posts_campaigns_path(:with_edito => true), :class => "folder_edit_icon"
+    %li= link_to t(".create_new"), refinery.new_mailchimp_admin_posts_campaign_path(:with_edito => true), :class => "page_add_icon"
+    %li= link_to t(".pause"), refinery.pause_mailchimp_admin_posts_campaigns_path(:with_edito => true), :class => "comment_cross_icon"
+    %li= link_to t(".resume"), refinery.resume_mailchimp_admin_posts_campaigns_path(:with_edito => true), :class => "comment_tick_icon"
+
+= content_for :stylesheets, stylesheet_link_tag('refinery/blog/backend')
+

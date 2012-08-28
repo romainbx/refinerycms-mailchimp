@@ -1,6 +1,23 @@
 -# Attention! here you can only use inline css style, css class ,id is not useful, either javascript
-- @posts.each do |post|
-  %div{:style => "margin-top:10px;margin-bottom:10px;"}
-    %div{:style => "font-size:16px;font-weight:bold;"}= link_to post.title, refinery.blog_post_url(post)
-    %div{:style => "font-size:11px; color:#888"}= post.published_at.try(:strftime, '%d-%b-%Y')
-    = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe.chomp
+%div{:style => "width:800px; margin:0px auto;"}
+  - if @edito
+    %div{:style => "float:right; width:300px; border:2px solid #ccc; padding:5px; margin-left:15px;"}
+      %ul{:style => "margin:0px; padding:0px; list-style:none;"}
+        - @categories_posts.each do |category, posts|
+          %li{:style => "margin-left:0px; padding-left:0px"}
+            %h4= category
+            %ul{:style => "margin-left:0px; padding-left:0px; list-style:none;"}
+              - posts.each do |post|
+                %li{:style => "margin-left:0px; padding-left:0px; margin-bottom:8px;"}
+                  = link_to post.title, refinery.blog_post_url(post)
+    %h2{:style => "color:#999"} Edito
+    %h2= @edito.title
+    %div= raw @edito.body
+    %hr
+  - @categories_posts.each do |category, posts|
+    %h2{:style => "color:#999"}= category
+    - posts.each do |post|
+      %div{:style => "margin-top:10px;margin-bottom:10px;"}
+        %h2= link_to post.title, refinery.blog_post_url(post)
+        %div{:style => "font-size:11px; color:#888"}= post.published_at.try(:strftime, '%d-%b-%Y')
+        = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe.chomp

@@ -11,8 +11,11 @@ Refinery::Core::Engine.routes.draw do
           post :unschedule
           post :posts
         end
+        collection do
+          get :update_positions
+        end
       end
-      resources :posts_campaigns do
+      resources :posts_campaigns, :except => [:show] do
         member do
           get :send_options
           post :send_test
@@ -22,8 +25,11 @@ Refinery::Core::Engine.routes.draw do
           post :posts
           get :add_post
         end
+        collection do
+          get :pause
+          get :resume
+        end
       end
-      resources :lists
     end
 
     # Frontend routes

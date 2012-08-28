@@ -7,13 +7,24 @@ module Refinery
 
       serialize :posts, Array
 
-      attr_accessible :from_name, :from_email, :subject, :body, :mailchimp_list_id, :mailchimp_template_id, :auto_tweet, :posts, :latest
+      attr_accessible :from_name, :from_email, :subject, :body, :mailchimp_list_id, :mailchimp_template_id, 
+        :auto_tweet, :posts, :latest, :edito_id
 
-      validates_presence_of :subject, :mailchimp_list_id, :from_email, :from_name
+      scope :weekly, lambda{ where("edito_id is not null") }
+      scope :selected, lambda{ where(:edito_id => nil) }
+
+      validates_presence_of :subject, :mailchimp_list_id, :from_email, :from_name, :posts
 
       before_save :update_mailchimp_campaign
       before_create :create_mailchimp_campaign
       before_destroy :delete_mailchimp_campaign
+
+      def self.paused?
+      end
+
+      def edito
+        @edito ||= Refinery::Blog::Category.find(self.edito_id)
+      end
 
       def sent?
         !!sent_at || !!scheduled_at && scheduled_at <= Time.now

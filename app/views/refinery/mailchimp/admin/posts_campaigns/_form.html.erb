@@ -11,14 +11,15 @@
     </span>
     <%= f.text_field :subject, :class => 'larger widest' -%>
   </div>
+  <% if params[:with_edito] %>
+    <div class='field'>
+      <%= f.label :edito %>
+      <%= select :posts_campaign, :edito_id, Refinery::Blog::Post.all.collect{|post| [post.title, post.id] } %>
+    </div>
+  <% end %>
   <div class='field'>
-    <% if params[:latest] %>
-      <%= f.label :latest, t('.latest') %>
-      <%= f.select(:latest, {"Latest 10" => 1, "Latest 20" => 2}) %>
-    <% else %>
-      <%= f.hidden_field :posts, :value => @posts_campaign.posts.join(",") %>
-      <%= render "posts" %>
-    <% end %>
+    <%= f.hidden_field :posts, :value => @posts_campaign.posts.join(",") %>
+    <%= render "posts" %>
   </div>
   <div class="hemisquare">
     <h2><%= t('.to_and_from') %></h2>
@@ -58,15 +59,6 @@
       </span>
       <%= f.select :mailchimp_template_id, @templates.collect{ |template| [template['name'], template['id']] }, :include_blank => true %>
     </div>
-
-    <div class='field'>
-      <span class='label_with_help'>
-        <%= f.label :auto_tweet, t('.auto_tweet') -%>
-        <%= refinery_help_tag t('.auto_tweet_help') %>
-      </span>
-      <%= f.check_box :auto_tweet %>
-    </div>
-  </div>
 
   <div class="clearfix"></div>
 

@@ -1,15 +1,4 @@
-<div id='actions'>
-  <ul>
-    <%= render_search_form if searchable? %>
-    <li>
-      <%= link_to t('.create_new'), refinery.new_mailchimp_admin_campaign_url,
-                   :class => "add_icon" %>
-    </li>
-    <li>
-    <%= link_to t('.posts_campaign_list'), refinery.mailchimp_admin_posts_campaigns_path, :id => :posts_campaigns, :class => "add_icon" %> 
-    </li>
-  </ul>
-</div>
+<%= render "refinery/mailchimp/admin/posts_campaigns/shared" %>
 <div id='records'>
   <% if searching? %>
     <h2><%= t('shared.admin.search.results_for', :query => params[:search]) %></h2>

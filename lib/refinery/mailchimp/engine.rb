@@ -11,11 +11,11 @@ module Refinery
       initializer "register refinery_mailchimp plugin" do
         Refinery::Plugin.register do |plugin|
           plugin.name = "refinery-mailchimp"
-          plugin.url = proc { Refinery::Core::Engine.routes.url_helpers.mailchimp_admin_posts_campaigns_path }
+          plugin.url = proc { Refinery::Core::Engine.routes.url_helpers.mailchimp_admin_campaigns_path }
           plugin.pathname = root
           plugin.menu_match = %r{refinery/mailchimp/(campaigns|lists|posts_campaigns)(/.+?)?$}
           plugin.activity = {
-            :class_name => :'refinery/mailchimp/posts_campaign',
+            :class_name => :'refinery/mailchimp/campaign',
             :title => 'subject'
           }
         end

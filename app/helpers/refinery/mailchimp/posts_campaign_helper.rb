@@ -22,21 +22,19 @@ module Refinery
       end
 
       def action_link_new
-        link_to t('.create_new'),
-          refinery.new_mailchimp_admin_posts_campaign_path,
-          :id => "add_new_posts_campaign", :class => "add_icon"
-      end
-
-      def action_link_new_latest
-        link_to t('.create_new_latest'),
-          refinery.new_mailchimp_admin_posts_campaign_path(:latest => true),
-          :id => 'add_new_posts_campaign', :class => "add_icon"
+        link = refinery.new_mailchimp_admin_posts_campaign_path
+         if params[:with_edito]
+           link = refinery.new_mailchimp_admin_posts_campaign_path(:with_edito => true)
+         end
+        link_to t('.create_new'), link, :id => "add_new_posts_campaign", :class => "add_icon"
       end
 
       def action_link_edit posts_campaign
-        link_to refinery_icon_tag("application_edit.png"),
-          refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign),
-          :class => "edit_posts_campaign"
+        link = refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign)
+        if params[:with_edito]
+          link = refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign, :with_edito => true)
+        end
+        link_to refinery_icon_tag("application_edit.png"), link, :class => "edit_posts_campaign"
       end
 
       def action_link_send_email posts_campaign
