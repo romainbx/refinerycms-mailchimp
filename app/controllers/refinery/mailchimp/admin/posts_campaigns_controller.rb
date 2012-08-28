@@ -57,6 +57,7 @@ module Refinery
                          :status => :created,
                          :location => location)
           else
+            binding.pry
             respond_with(@posts_campaign, :status => :unprocessable_entity)
           end
         end
@@ -136,7 +137,7 @@ module Refinery
 
         def set_campaign_body
           if params[:posts_campaign][:edito_id]
-            edition = Refinery::Blog::Post.find params[:posts_campaign][:edito_id]
+            edition = Refinery::Blog::Edition.find params[:posts_campaign][:edito_id]
             @posts = edition.content_posts
             @edito = edition.edito
           elsif params[:posts_campaign][:posts].size > 0

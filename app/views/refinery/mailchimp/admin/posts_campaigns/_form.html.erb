@@ -14,8 +14,7 @@
   <div class='field'>
     <% if params[:with_edito] %>
       <%= f.label :edito, t('.edito') %>
-      <%= select "posts_campaign", "edito_id", Refinery::Blog::Edition.all.collect{|edition| 
-        [edition.string_title, edition.id]} }
+      <%= select "posts_campaign", "edito_id", Refinery::Blog::Edition.all.collect{|edition| [edition.string_title, edition.id]}
       %>
     <% else %>
         <%= f.hidden_field :posts, :value => @posts_campaign.posts.join(",") %>

@@ -13,7 +13,7 @@ module Refinery
       scope :weekly, lambda{ where("edito_id is not null") }
       scope :selected, lambda{ where(:edito_id => nil) }
 
-      validates_presence_of :subject, :mailchimp_list_id, :from_email, :from_name, :posts
+      validates_presence_of :subject, :mailchimp_list_id, :from_email, :from_name
 
       before_save :update_mailchimp_campaign
       before_create :create_mailchimp_campaign
