@@ -21,13 +21,31 @@ module Refinery
         end
       end
 
+      def nltype_label posts_campaign
+        case posts_campaign.nltype
+        when 1 then "weekly"
+        when 2 then "free edito"
+        when 3 then "free posts"
+        end
+      end
+
+      def paused_label posts_campaign
+        "paused" if posts_campaign.paused?
+      end
+
       def action_link_new
         link = refinery.new_mailchimp_admin_posts_campaign_path
+         if params[:with_edito]
+           link = refinery.new_mailchimp_admin_posts_campaign_path(:with_edito => true)
+         end
         link_to t('.create_new'), link, :id => "add_new_posts_campaign", :class => "add_icon"
       end
 
       def action_link_edit posts_campaign
         link = refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign)
+        if params[:with_edito]
+          link = refinery.edit_mailchimp_admin_posts_campaign_path(posts_campaign, :with_edito => true)
+        end
         link_to refinery_icon_tag("application_edit.png"), link, :class => "edit_posts_campaign"
       end
 
