@@ -29,10 +29,6 @@ module Refinery
         end
       end
 
-      def paused_label posts_campaign
-        "paused" if posts_campaign.paused?
-      end
-
       def action_link_new
         link = refinery.new_mailchimp_admin_posts_campaign_path
          if params[:with_edito]

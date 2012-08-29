@@ -73,15 +73,16 @@ en:
               unschedule_campaign: Unschedule Campaign
             shared:
               newsletter: Free Text Newsletter
-              manage: Manage
-              create_new: Create
               free_edito: Free Edito
               selected_posts_newsletter: Free Posts 
               weekly_newsletter: Weekly Newsletter
               paused: newsletter paused successfully
               resumed: newsletter resumed successfully
+            shared_links:
               pause: Pause the newsletter
               resume: Resume the newsletter
+              manage: Manage
+              create_new: Create
           posts_campaigns:
             << : *campaign
             index:

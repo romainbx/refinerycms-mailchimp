@@ -19,7 +19,11 @@ module Refinery
         skip_before_filter :get_mailchimp_assets, :if => lambda {|c| !!request.xhr? }
 
         def index
-          @posts_campaigns = Refinery::Mailchimp::PostsCampaign.paginate(:page => params[:page])
+          if params[:nltype]
+            @posts_campaigns = Refinery::Mailchimp::PostsCampaign.where(:nltype => "#{params[:nltype]}").paginate(:page => params[:page])
+          else
+            @posts_campaigns = Refinery::Mailchimp::PostsCampaign.paginate(:page => params[:page])
+          end
         end
 
         def new
@@ -64,14 +68,18 @@ module Refinery
         end
 
         def pause
-          Gibbon.campaign_pause(:cid => Refinery::Mailchimp.weekly_campaign_id)
+          setting_key = "#{Refinery::Mailchimp::PostsCampaign.string_nltype(params[:nltype].to_i)}_pause"
+          setting = Refinery::Setting.find(setting_key)
+          setting.update_attribute(:value, true)
           flash[:notice] = t('refinery.mailchimp.admin.campaigns.shared.paused')
           redirect_to :back
         end
 
         def resume
-          Gibbon.campaign_resume(:cid => Refinery::Mailchimp.weekly_campaign_id)
-          flash[:notice] = t('refinery.mailchimp.admin.campaignss.shared.resumed')
+          setting_key = "#{Refinery::Mailchimp::PostsCampaign.string_nltype(params[:nltype].to_i)}_pause"
+          setting = Refinery::Setting.find(setting_key)
+          setting.update_attribute(:value, false)
+          flash[:notice] = t('refinery.mailchimp.admin.campaigns.shared.resumed')
           redirect_to :back
         end
 
@@ -144,7 +152,6 @@ module Refinery
             @categories_posts = @posts.to_a.group_by{|post| post.categories.first.title }
             body_html = render_to_string(:partial => "free_posts_newsletter")
           end
-          binding.pry
           params[:posts_campaign][:body] = body_html
         end
 

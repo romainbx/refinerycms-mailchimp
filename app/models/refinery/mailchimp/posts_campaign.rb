@@ -24,7 +24,8 @@ module Refinery
 
       def self.send_newsletter type
         last_campaign = Refinery::Mailchimp::PostsCampaign.send(type)
-        last_campaign.send_now unless last_campaign.paused?
+        setting = Refinery::Setting.find("#{post_campaign.string_nltype}_pause")
+        last_campaign.send_now unless setting.value
       end
 
       def self.last_edition
@@ -39,8 +40,16 @@ module Refinery
         self.free_edito.last
       end
 
-      def paused?
-        self.paused
+      def string_nltype
+        Refinery::Mailchimp::PostsCampaign.string_nltype self.nltype
+      end
+
+      def self.string_nltype nu
+        case nu
+        when 1 then "weekly"
+        when 2 then "free_edito"
+        when 3 then "free_posts"
+        end
       end
 
       def edito

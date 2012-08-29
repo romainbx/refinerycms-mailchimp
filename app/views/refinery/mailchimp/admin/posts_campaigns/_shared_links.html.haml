@@ -1,0 +1,8 @@
+%li= link_to t(".manage"), refinery.mailchimp_admin_posts_campaigns_path(:nltype => nltype), :class => "folder_edit_icon"
+%li= link_to t(".create_new"), refinery.new_mailchimp_admin_posts_campaign_path(:nltype => nltype), :class => "page_add_icon"
+- paused = Refinery::Setting.find("#{Refinery::Mailchimp::PostsCampaign.string_nltype(nltype)}_pause").value
+- if !paused
+  %li= link_to t(".pause"), refinery.pause_mailchimp_admin_posts_campaigns_path(:nltype => nltype), :class => "comment_tick_icon"
+- else
+  %li= link_to t(".resume"), refinery.resume_mailchimp_admin_posts_campaigns_path(:nltype => nltype), :class => "comment_cross_icon"
+
