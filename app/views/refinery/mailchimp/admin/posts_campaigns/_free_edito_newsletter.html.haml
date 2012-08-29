@@ -1,0 +1,6 @@
+
+-# Attention! here you can only use inline css style, css class ,id is not useful, either javascript
+%div{:style => "width:800px; margin:0px auto;"}
+  %h2{:style => "color:#999"} Edito
+  %h2= @edito.title
+  %div= raw @edito.body

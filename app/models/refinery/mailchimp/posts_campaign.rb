@@ -3,15 +3,18 @@ module Refinery
     class PostsCampaign < Refinery::Core::BaseModel
       include Refinery::Core::Engine.routes.url_helpers
 
+      WEEKLY, FREE_POSTS, FREE_EDITO = 1, 2, 3
+
       self.table_name = 'refinery_mailchimp_posts_campaigns'
 
       serialize :posts, Array
 
       attr_accessible :from_name, :from_email, :subject, :body, :mailchimp_list_id, :mailchimp_template_id, 
-        :auto_tweet, :posts, :latest, :edito_id
+        :auto_tweet, :posts, :latest, :edito_id, :paused, :nltype
 
-      scope :weekly, lambda{ where("edito_id is not null") }
-      scope :selected, lambda{ where(:edito_id => nil) }
+      scope :weekly, lambda{ where(:nltype => self::WEEKLY) }
+      scope :free_posts, lambda{ where(:nltype => self::FREE_POSTS) }
+      scope :free_edito, lambda{ where(:nltype => self::FREE_EDITO) }
 
       validates_presence_of :subject, :mailchimp_list_id, :from_email, :from_name
 
@@ -19,7 +22,25 @@ module Refinery
       before_create :create_mailchimp_campaign
       before_destroy :delete_mailchimp_campaign
 
-      def self.paused?
+      def self.send_newsletter type
+        last_campaign = Refinery::Mailchimp::PostsCampaign.send(type)
+        last_campaign.send_now unless last_campaign.paused?
+      end
+
+      def self.last_edition
+        self.weekly.last
+      end
+
+      def self.last_free_posts
+        self.free_posts.last
+      end
+
+      def self.last_free_edito
+        self.free_edito.last
+      end
+
+      def paused?
+        self.paused
       end
 
       def edito

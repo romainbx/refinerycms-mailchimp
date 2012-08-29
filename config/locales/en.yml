@@ -41,6 +41,7 @@ en:
               subject: Subject
               body: Body
               edito: Edition
+              free_edito: Free Edito
               to_and_from: To and From
               settings: Settings
               subject_help: The subject line that will be used for the campaign emails.
@@ -74,7 +75,8 @@ en:
               newsletter: Free Text Newsletter
               manage: Manage
               create_new: Create
-              selected_posts_newsletter: Selected Posts Newsletter
+              free_edito: Free Edito
+              selected_posts_newsletter: Free Posts 
               weekly_newsletter: Weekly Newsletter
               paused: newsletter paused successfully
               resumed: newsletter resumed successfully

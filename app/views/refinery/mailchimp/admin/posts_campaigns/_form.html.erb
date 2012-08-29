@@ -11,17 +11,31 @@
     </span>
     <%= f.text_field :subject, :class => 'larger widest' -%>
   </div>
+
   <div class='field'>
-    <% if params[:with_edito] %>
-      <%= f.label :edito, t('.edito') %>
-      <%= select "posts_campaign", "edito_id", Refinery::Blog::Edition.all.collect{|edition| [edition.string_title, edition.id]}
-      %>
-    <% else %>
-        <%= f.hidden_field :posts, :value => @posts_campaign.posts.join(",") %>
-        <%= render "posts" %>
-    <% end %>
-    <br/><br/>
+    <%= f.hidden_field :nltype, :value => params[:nltype] %>
   </div>
+  <% if @posts_campaign.nltype == 1 %>
+    <div class='field edition'>
+      <%= label_tag t('.edition') %>
+      <%= select "posts_campaign", "edito_id", Refinery::Blog::Edition.all.collect{|edition| [edition.string_title, edition.id]} %>
+    </div>
+  <% end %>
+  <% if  @posts_campaign.nltype == 2 %>
+    <div class="field edito">
+      <%= label_tag t('.edito') %>
+      <%= select "posts_campaign", "edito_id", Refinery::Blog::Category.where(:title => "blog").first.posts.collect{|post| [post.title, post.id]} %>
+    </div>
+  <% end %>
+
+  <% if @posts_campaign.nltype == 3 %>
+    <div class='field posts'>
+      <%= f.hidden_field :posts, :value => @posts_campaign.posts.join(",") %>
+      <%= render "posts" %>
+    </div>
+  <% end %>
+
+  <br/><br/>
   <div class="hemisquare">
     <h2><%= t('.to_and_from') %></h2>
 

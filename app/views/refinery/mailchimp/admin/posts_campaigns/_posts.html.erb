@@ -1,6 +1,6 @@
 <div class='field post_campaign_body'>
   <%= label_tag :posts, t('.posts') -%>
-  <%= will_paginate @posts, :previous_label => '&laquo;', :next_label => '&raquo;' %>
+  <%= will_paginate @posts, :previous_label => '&laquo;', :next_label => '&raquo;', :remote => false %>
   <ul>
     <% @posts.each do |post| %>
       <li>

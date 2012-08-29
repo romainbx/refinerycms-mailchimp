@@ -1,7 +1,3 @@
 = render "shared"
-- if params[:with_edito]
-  %h3= t(".weekly_newsletter")
-- else
-  %h3= t(".selected_posts_newsletter")
 #records
   %ul#soratble_list= render_posts_campaign_list @posts_campaigns

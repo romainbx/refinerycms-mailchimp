@@ -15,15 +15,11 @@ module Refinery
         before_filter :find_posts_campaign, :except => [:index, :new, :create, :pause, :resume]
         before_filter :fully_qualify_links, :only => [:create, :update]
         before_filter :set_campaign_body, :only => [:create, :update]
-        before_filter :find_posts, :only => [:new, :edit]
+        before_filter :find_posts, :only => [:new, :edit, :create]
         skip_before_filter :get_mailchimp_assets, :if => lambda {|c| !!request.xhr? }
 
         def index
-          if params[:with_edito]
-            @posts_campaigns = Refinery::Mailchimp::PostsCampaign.weekly.paginate(:page => params[:page])
-          else
-            @posts_campaigns = Refinery::Mailchimp::PostsCampaign.selected.paginate(:page => params[:page])
-          end
+          @posts_campaigns = Refinery::Mailchimp::PostsCampaign.paginate(:page => params[:page])
         end
 
         def new
@@ -34,6 +30,7 @@ module Refinery
           from_name = ::Refinery::Setting.get_or_set(name, default_name)
           from_email =::Refinery::Setting.get_or_set(email, default_email)
           @posts_campaign = ::Refinery::Mailchimp::PostsCampaign.new :from_name => from_name, :from_email => from_email
+          @posts_campaign.nltype = params[:nltype]
           respond_to do |format|
             format.js { render :edit, :layout => false }
             format.html
@@ -48,27 +45,22 @@ module Refinery
         end
 
         def create
+          params[:posts_campaign][:posts] = [] if params[:posts_campaign][:posts] == ""
           @posts_campaign = PostsCampaign.create(params[:posts_campaign])
           if @posts_campaign.save
             flash[:notice] = t('refinery.crudify.created', :what => "'#{@posts_campaign.subject}'")
             location = refinery.mailchimp_admin_posts_campaigns_path
-            location = refinery.mailchimp_admin_posts_campaigns_path(:with_edito => true) if @posts_campaign.edito_id
             respond_with(@posts_campaign, 
                          :status => :created,
                          :location => location)
           else
-            binding.pry
-            respond_with(@posts_campaign, :status => :unprocessable_entity)
+            respond_with @posts_campaign, :status => :unprocessable_entity
           end
         end
 
         def update
           PostsCampaign.find(params[:id]).update_attributes(params[:posts_campaign])
-          if(params[:with_edito])
-            redirect_to refinery.mailchimp_admin_posts_campaigns_path(:with_edito => true)
-          else
-            redirect_to refinery.mailchimp_admin_posts_campaigns_path
-          end
+          redirect_to refinery.mailchimp_admin_posts_campaigns_path
         end
 
         def pause
@@ -136,17 +128,23 @@ module Refinery
       protected
 
         def set_campaign_body
-          if params[:posts_campaign][:edito_id]
+          if params[:posts_campaign][:nltype] == "1"
             edition = Refinery::Blog::Edition.find params[:posts_campaign][:edito_id]
             @posts = edition.content_posts
             @edito = edition.edito
-          elsif params[:posts_campaign][:posts].size > 0
+            @categories_posts = @posts.to_a.group_by{|post| post.categories.first.title }
+            body_html = render_to_string(:partial => "weekly_newsletter")
+          elsif params[:posts_campaign][:nltype] == "2"
+            @edito = Refinery::Blog::Post.find params[:posts_campaign][:edito_id]
+            body_html = render_to_string(:partial => "free_edito_newsletter")
+          elsif params[:posts_campaign][:nltype] == "3"
             posts_ids = params[:posts_campaign][:posts].split(",")
             @posts = Refinery::Blog::Post.where(:id => posts_ids)
             params[:posts_campaign][:posts] = posts_ids
+            @categories_posts = @posts.to_a.group_by{|post| post.categories.first.title }
+            body_html = render_to_string(:partial => "free_posts_newsletter")
           end
-          @categories_posts = @posts.to_a.group_by{|post| post.categories.first.title }
-          body_html = render_to_string(:partial => "campaign_body")
+          binding.pry
           params[:posts_campaign][:body] = body_html
         end
 
