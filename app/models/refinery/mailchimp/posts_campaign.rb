@@ -25,7 +25,7 @@ module Refinery
       def self.send_newsletter type
         last_campaign = Refinery::Mailchimp::PostsCampaign.send(type)
         paused = Refinery::Setting.get("#{last_campaign.string_nltype}_pause")
-        last_campaign.send_now unless paused
+        last_campaign.send_now unless paused || last_campaign.scheduled?
       end
 
       def self.last_edition
