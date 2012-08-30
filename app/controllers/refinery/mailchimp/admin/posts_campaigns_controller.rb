@@ -69,16 +69,14 @@ module Refinery
 
         def pause
           setting_key = "#{Refinery::Mailchimp::PostsCampaign.string_nltype(params[:nltype].to_i)}_pause"
-          setting = Refinery::Setting.find(setting_key)
-          setting.update_attribute(:value, true)
+          setting = Refinery::Setting.set(setting_key, true)
           flash[:notice] = t('refinery.mailchimp.admin.campaigns.shared.paused')
           redirect_to :back
         end
 
         def resume
           setting_key = "#{Refinery::Mailchimp::PostsCampaign.string_nltype(params[:nltype].to_i)}_pause"
-          setting = Refinery::Setting.find(setting_key)
-          setting.update_attribute(:value, false)
+          setting = Refinery::Setting.set(setting_key, false)
           flash[:notice] = t('refinery.mailchimp.admin.campaigns.shared.resumed')
           redirect_to :back
         end

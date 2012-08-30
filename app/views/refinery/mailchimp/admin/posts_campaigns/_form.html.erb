@@ -13,7 +13,7 @@
   </div>
 
   <div class='field'>
-    <%= f.hidden_field :nltype, :value => params[:nltype] %>
+    <%= f.hidden_field :nltype, :value => @posts_campaign.nltype %>
   </div>
   <% if @posts_campaign.nltype == 1 %>
     <div class='field edition'>
@@ -24,7 +24,7 @@
   <% if  @posts_campaign.nltype == 2 %>
     <div class="field edito">
       <%= label_tag t('.edito') %>
-      <%= select "posts_campaign", "edito_id", Refinery::Blog::Category.where(:title => "blog").first.posts.collect{|post| [post.title, post.id]} %>
+      <%= select "posts_campaign", "edito_id", Refinery::Blog::Category.where(:title => "editorial").first.posts.collect{|post| [post.title, post.id]} %>
     </div>
   <% end %>
 
