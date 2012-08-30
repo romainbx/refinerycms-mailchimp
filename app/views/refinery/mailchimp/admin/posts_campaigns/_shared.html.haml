@@ -1,12 +1,28 @@
+- weekly_paused = Refinery::Setting.get("weekly_pause")
+- free_edito_paused = Refinery::Setting.get("free_edito_pause")
+- free_posts_paused = Refinery::Setting.get("free_posts_pause")
 #actions
   %ul.collapsible_menu
-    %li.not_a_link= link_to t(".weekly_newsletter"), "#", :class => "folder_icon"
+    %li.not_a_link
+      - if weekly_paused
+        = link_to "#{t('.weekly')}#{t('.is_paused')}", "#", :class => "folder_icon"
+      - else
+        = link_to t(".weekly"), "#", :class => "folder_icon"
     = render "shared_links", :nltype => 1
   %ul.collapsible_menu
-    %li.not_a_link= link_to t(".selected_posts_newsletter"), "#", :class => "folder_icon"
+    %li.not_a_link
+      - if free_posts_paused
+        = link_to "#{t('.free_posts')}#{t('.is_paused')}", "#", :class => "folder_icon"
+      - else
+        = link_to t(".free_posts"), "#", :class => "folder_icon"
+      = t(".is_paused") if free_edito_paused
     = render "shared_links", :nltype => 3
   %ul.collapsible_menu
-    %li.not_a_link= link_to t(".free_edito"), "#", :class => "folder_icon"
+    %li.not_a_link
+      - if free_edito_paused
+        = link_to "#{t('.free_edito')}#{t('.is_paused')}", "#", :class => "folder_icon"
+      - else
+        = link_to t(".free_edito"), "#", :class => "folder_icon"
     = render "shared_links", :nltype => 2
   %ul.collapsible_menu
     %li.not_a_link= link_to t(".newsletter"), "#", :class => "folder_icon"

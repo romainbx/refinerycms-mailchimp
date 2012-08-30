@@ -75,10 +75,11 @@ en:
             shared:
               newsletter: Free Text Newsletter
               free_edito: Free Edito
-              selected_posts_newsletter: Free Posts 
-              weekly_newsletter: Weekly Newsletter
+              free_posts: Free Posts 
+              weekly: Weekly Newsletter
               paused: newsletter paused successfully
               resumed: newsletter resumed successfully
+              is_paused: (paused)
             shared_links:
               pause: Pause the newsletter
               resume: Resume the newsletter
