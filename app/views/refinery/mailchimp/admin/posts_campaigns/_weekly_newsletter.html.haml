@@ -1,23 +1,43 @@
 -# Attention! here you can only use inline css style, css class ,id is not useful, either javascript
-%div{:style => "width:800px; margin:0px auto;"}
+%div{:style => "margin:0px auto;padding:10px;"}
   - if @edito
     %div{:style => "float:right; width:300px; border:2px solid #ccc; padding:5px; margin-left:15px;"}
       %ul{:style => "margin:0px; padding:0px; list-style:none;"}
         - @categories_posts.each do |category, posts|
           %li{:style => "margin-left:0px; padding-left:0px"}
-            %h4= category
+            = category
             %ul{:style => "margin-left:0px; padding-left:0px; list-style:none;"}
               - posts.each do |post|
                 %li{:style => "margin-left:0px; padding-left:0px; margin-bottom:8px;"}
-                  = link_to post.title, refinery.blog_post_url(post)
-    %h2{:style => "color:#999"} Edito
-    %h2= @edito.title
-    %div= raw @edito.body
+                  = link_to post.title, refinery.blog_post_url(post)+'?token=*|TOKEN|*'
+    %div{:style => "border-bottom: 5px solid #EEE;color: #DDD;font-size: 18px;font-weight:bold;margin-bottom: 20px;padding-bottom: 5px;text-transform: uppercase;"}
+      Edito
+    %div{:style => "margin-top:10px;margin-bottom:10px;"}
+      %div{:style => "font-size:20px; font-weight:bold;;margin-bottom:5px;"}
+        = @edito.title
+      = raw @edito.body
     %hr
   - @categories_posts.each do |category, posts|
-    %h2{:style => "color:#999"}= category
+    %div{:style => "border-bottom: 5px solid #EEE;color: #DDD;font-size: 18px;font-weight:bold;margin-bottom: 20px;padding-bottom: 5px;text-transform: uppercase;"}
+      = category
     - posts.each do |post|
       %div{:style => "margin-top:10px;margin-bottom:10px;"}
-        %h2= link_to post.title, refinery.blog_post_url(post)
-        %div{:style => "font-size:11px; color:#888"}= post.published_at.try(:strftime, '%d-%b-%Y')
+        %div{:style => "font-size:20px; font-weight:bold;;margin-bottom:5px;"}
+          = link_to post.title, refinery.blog_post_url(post)+'?token=*|TOKEN|*', :style => "font-weight:bold;color:#333;text-decoration: none;"
         = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe.chomp
+        %div{:style => "font-size:11px; color:#888"}
+          = l(post.published_at, :format => '%d %B %Y')
+
+
+%div{:style => "margin:0px auto;padding:10px;"}
+  - @categories_posts.each do |category, posts|
+    %div{:style => "border-bottom: 5px solid #EEE;color: #DDD;font-size: 18px;font-weight:bold;margin-bottom: 20px;padding-bottom: 5px;text-transform: uppercase;"}
+      = category
+    - posts.each do |post|
+      %div{:style => "margin-top:10px;margin-bottom:10px;"}
+        %div{:style => "font-size:20px; font-weight:bold;;margin-bottom:5px;"}
+          = link_to post.title, refinery.blog_post_url(post)+'?token=*|TOKEN|*', :style => "font-weight:bold;color:#333;text-decoration: none;"
+        = truncate(strip_tags(post.body), :length=>190, :omission=>'...').html_safe.chomp
+        %div{:style => "font-size:11px; color:#888; text-align:right;margin-top:10px;"}
+          Publié le
+          = l(post.published_at, :format => '%d %B %Y')

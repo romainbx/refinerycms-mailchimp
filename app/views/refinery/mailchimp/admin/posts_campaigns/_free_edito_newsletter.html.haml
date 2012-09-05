@@ -1,6 +1,12 @@
 
 -# Attention! here you can only use inline css style, css class ,id is not useful, either javascript
-%div{:style => "width:800px; margin:0px auto;"}
-  %h2{:style => "color:#999"} Edito
-  %h2= @edito.title
-  %div= raw @edito.body
+%div{:style => "margin:0px auto;padding:10px;"}
+  %div{:style => "border-bottom: 5px solid #EEE;color: #DDD;font-size: 18px;font-weight:bold;margin-bottom: 20px;padding-bottom: 5px;text-transform: uppercase;"}
+    Edito
+  %div{:style => "margin-top:10px;margin-bottom:10px;"}
+    %div{:style => "font-size:20px; font-weight:bold;;margin-bottom:5px;"}
+      = link_to @edito.title, refinery.blog_post_url(@edito)+'?token=*|TOKEN|*', :style => "font-weight:bold;color:#333;text-decoration: none;"
+    = raw @edito.body
+    %div{:style => "font-size:11px; color:#888; text-align:right;margin-top:10px;"}
+      Publié le
+      = l(@edito.published_at, :format => '%d %B %Y')
